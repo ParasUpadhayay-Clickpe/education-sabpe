@@ -18,8 +18,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SabPe - Secure Insurance Payments",
-  description: "Pay insurance premiums securely and instantly with SabPe.",
+  title: "SabPe - Secure Education Payments",
+  description: "Pay education fees securely and instantly with SabPe.",
 };
 
 export default function RootLayout({
@@ -65,7 +65,7 @@ export default function RootLayout({
                   </div>
                   <h3 className="text-2xl font-bold">SabPe</h3>
                 </div>
-                <p className="text-gray-400 mb-6 leading-relaxed">Secure and convenient insurance payment solutions for individuals and businesses, simplifying your financial protection.</p>
+                <p className="text-gray-400 mb-6 leading-relaxed">Secure and convenient Education payment solutions for individuals and businesses, simplifying your financial protection.</p>
                 <div className="flex space-x-5 mt-6">
                   <a href="#" className="text-gray-400 hover:text-accent transition duration-300 text-xl"><i className="fab fa-facebook-f" /></a>
                   <a href="#" className="text-gray-400 hover:text-accent transition duration-300 text-xl"><i className="fab fa-twitter" /></a>

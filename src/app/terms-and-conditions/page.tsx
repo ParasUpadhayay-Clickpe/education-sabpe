@@ -13,7 +13,7 @@ export default function TermsAndConditionsPage() {
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Registration</h2>
                 <p className="mb-6">Provide true, accurate, current and complete information. "KB Topay Finnovative LLP" may reject or terminate access for violations.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Payment Types</h2>
-                <p className="mb-6">Services include Rent, Utility, Vendor, GST and others as specified. Users are responsible for tax implications.</p>
+                <p className="mb-6">Services include Education payment like College fees, School fees, Tuition fees and others as specified. Users are responsible for tax implications.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">User Obligations</h2>
                 <ul className="list-disc list-inside mb-6 space-y-2">
                     <li>Provide accurate information and maintain required licenses</li>

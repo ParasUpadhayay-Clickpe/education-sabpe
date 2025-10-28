@@ -4,7 +4,7 @@ export default function PrivacyPolicyPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
             <div className="prose prose-lg max-w-none text-gray-700">
                 <p className="mb-6">
-                    [&quot;"KB Topay Finnovative LLP"&quot;, &quot;we&quot; or &quot;us&quot;] is committed to protecting your information and privacy. This
+                    [&quot;KB Topay Finnovative LLP&quot;, &quot;we&quot; or &quot;us&quot;] is committed to protecting your information and privacy. This
                     Privacy Policy is designed to help you understand how we may collect, process, store and use the
                     information you provide to us and to assist you in making informed decisions while using our Service.
                 </p>
