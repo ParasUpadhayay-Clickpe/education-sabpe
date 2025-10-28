@@ -28,7 +28,7 @@ export default function TermsAndConditionsPage() {
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Limitation of Liability</h2>
                 <p className="mb-6">To the maximum extent permitted by law, "KB Topay Finnovative LLP" is not liable for indirect or consequential damages.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Contact Information</h2>
-                <p className="mb-6">For queries, contact support@sabpe.com.</p>
+                <p className="mb-6">For queries, contact +91 93272 82729.</p>
             </div>
         </main>
     );

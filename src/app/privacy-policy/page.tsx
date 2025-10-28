@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">9. Information Security</h2>
                 <p className="mb-6">"KB Topay Finnovative LLP" employs stringent security measures. Sensitive information is encrypted.</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">10. Contact Us</h2>
-                <p className="mb-6">For queries regarding this Privacy Policy, contact support@sabpe.com.</p>
+                <p className="mb-6">For queries regarding this Privacy Policy, contact +91 93272 82729.</p>
             </div>
         </main>
     );

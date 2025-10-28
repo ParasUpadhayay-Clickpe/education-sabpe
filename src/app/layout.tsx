@@ -18,8 +18,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SabPe - Secure Education Payments",
-  description: "Pay education fees securely and instantly with SabPe.",
+  title: "Secure Education Payments",
+  description: "Pay education fees securely and instantly.",
 };
 
 export default function RootLayout({
@@ -39,7 +39,7 @@ export default function RootLayout({
               <div className="bg-primary p-3 rounded-lg mr-3 shadow-md">
                 <i className="fas fa-shield-alt text-white text-xl" />
               </div>
-              <span className="text-2xl font-bold text-primary">SabPe</span>
+              <span className="text-2xl font-bold text-primary">KB ToPay Finovative LLP</span>
             </Link>
             <nav className="hidden md:flex items-center space-x-8">
               <Link href="/#hero" className="font-medium text-gray-700 hover:text-primary transition duration-300">Home</Link>
@@ -63,7 +63,7 @@ export default function RootLayout({
                   <div className="bg-primary p-3 rounded-lg mr-3 shadow-md">
                     <i className="fas fa-shield-alt text-white text-xl" />
                   </div>
-                  <h3 className="text-2xl font-bold">SabPe</h3>
+                  <h3 className="text-2xl font-bold">KB ToPay Finovative LLP</h3>
                 </div>
                 <p className="text-gray-400 mb-6 leading-relaxed">Secure and convenient Education payment solutions for individuals and businesses, simplifying your financial protection.</p>
                 <div className="flex space-x-5 mt-6">
@@ -86,14 +86,13 @@ export default function RootLayout({
                 <ul className="space-y-4 text-gray-400">
                   <li className="flex items-start"><i className="fas fa-map-marker-alt mt-1 mr-3 text-secondary" /><span>UG 150, Marvella Corridor, VIP Road, Vesu, Surat -  395007</span></li>
                   <li className="flex items-center"><i className="fas fa-phone-alt mr-3 text-secondary" /><span>+91 93272 82729</span></li>
-                  <li className="flex items-center"><i className="fas fa-envelope mr-3 text-secondary" /><span>support@sabpe.com</span></li>
                   <li className="flex items-center"><i className="fas fa-clock mr-3 text-secondary" /><span>Mon-Sat: 9:00 AM - 6:00 PM</span></li>
                 </ul>
               </div>
             </div>
             <div className="pt-8 border-t border-gray-800">
               <div className="flex flex-col md:flex-row justify-between items-center">
-                <p className="text-gray-500 text-sm">© 2025 SabPe. All rights reserved.</p>
+                <p className="text-gray-500 text-sm">© 2025 KB ToPay Finovative LLP. All rights reserved.</p>
                 <div className="flex space-x-8 mt-4 md:mt-0">
                   <Link href="/privacy-policy" className="text-gray-500 hover:text-white transition duration-300">Privacy Policy</Link>
                   <Link href="/terms-and-conditions" className="text-gray-500 hover:text-white transition duration-300">Terms of Service</Link>
