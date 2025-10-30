@@ -209,6 +209,7 @@ async function preEnquiryApi(billerId: string, inputParameters: Record<string, s
         billDetails: Array.isArray(e?.BillDetails) ? e.BillDetails : [],
         additionalDetails: Array.isArray(e?.AdditionalDetails) ? e.AdditionalDetails : [],
         statuscode: (data as any)?.statuscode,
+        status: (data as any)?.status,
         rawStatus: (data as any)?.status,
     } as EnquiryResponse;
 }
@@ -518,6 +519,20 @@ export default function PayPremiumPage() {
                                             {enquiryData.billDueDate || enquiryData.BillDueDate || "N/A"}
                                         </span>
                                     </div>
+                                    {/* Bill Period */}
+                                    <div className="flex justify-between">
+                                        <span>Bill Period:</span>
+                                        <span className="font-semibold">
+                                            {enquiryData.billPeriod || enquiryData.BillPeriod || "N/A"}
+                                        </span>
+                                    </div>
+                                    {/* Bill Date */}
+                                    <div className="flex justify-between">
+                                        <span>Bill Date:</span>
+                                        <span className="font-semibold">
+                                            {enquiryData.billDate || enquiryData.BillDate || "N/A"}
+                                        </span>
+                                    </div>
                                     {/* Policy/Customer Name for display (in addition to Customer Name field) */}
                                     <div className="flex justify-between">
                                         <span>Name:</span>
@@ -536,7 +551,7 @@ export default function PayPremiumPage() {
 
                             <div className="bg-white rounded-lg p-4 border border-lightBg mb-6">
                                 <div className="flex flex-wrap gap-3 text-sm">
-                                    <span className={`px-3 py-1 rounded-full ${enquiryData.statuscode === 'TXN' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                    <span className={`px-3 py-1 rounded-full ${enquiryData.statuscode === 'TXN' ? 'bg-green-100 text-green-800' : enquiryData.statuscode === 'ERR' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
                                         {enquiryData.status || enquiryData.rawStatus || 'Verified'}
                                     </span>
                                     <span className="px-3 py-1 rounded-full bg-cardBg border border-lightBg">
