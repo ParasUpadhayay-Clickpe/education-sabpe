@@ -90,13 +90,57 @@ const LAMBDA_BASE = (
     "https://4vtfgim3z4.execute-api.ap-south-1.amazonaws.com/dev"
 ).replace(/\/$/, "");
 
-async function fetchBillers(pageNumber: number, recordsPerPage: number): Promise<{ records: Biller[]; meta: BillerMeta }> {
+const INDIAN_STATES = [
+    "ANDAMAN AND NICOBAR ISLANDS",
+    "ANDHRA PRADESH",
+    "ARUNACHAL PRADESH",
+    "ASSAM",
+    "BIHAR",
+    "CHANDIGARH",
+    "CHHATTISGARH",
+    "DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
+    "DELHI",
+    "GOA",
+    "GUJARAT",
+    "HARYANA",
+    "HIMACHAL PRADESH",
+    "JAMMU AND KASHMIR",
+    "JHARKHAND",
+    "KARNATAKA",
+    "KERALA",
+    "LADAKH",
+    "LAKSHADWEEP",
+    "MADHYA PRADESH",
+    "MAHARASHTRA",
+    "MANIPUR",
+    "MEGHALAYA",
+    "MIZORAM",
+    "NAGALAND",
+    "ODISHA",
+    "PUDUCHERRY",
+    "PUNJAB",
+    "RAJASTHAN",
+    "SIKKIM",
+    "TAMIL NADU",
+    "TELANGANA",
+    "TRIPURA",
+    "UTTAR PRADESH",
+    "UTTARAKHAND",
+    "WEST BENGAL",
+];
+
+async function fetchBillers(pageNumber: number, recordsPerPage: number, selectedState?: string): Promise<{ records: Biller[]; meta: BillerMeta }> {
+    const filters: any = { categoryKey: "C09" };
+    if (selectedState) {
+        filters.coverageState = selectedState;
+    }
+
     const res = await fetch(`${LAMBDA_BASE}/bbps/billers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             pagination: { pageNumber, recordsPerPage },
-            filters: { categoryKey: "C09" },
+            filters,
         }),
     });
     const data: any = await res.json();
@@ -218,6 +262,7 @@ export default function PayPremiumPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [billers, setBillers] = useState<Biller[]>([]);
     const [search, setSearch] = useState("");
+    const [selectedState, setSelectedState] = useState<string>("");
     const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
     const [billerDetails, setBillerDetails] = useState<BillerDetails | null>(null);
     const [formData, setFormData] = useState<Record<string, string>>({});
@@ -225,6 +270,7 @@ export default function PayPremiumPage() {
     const [selectedPaymentMode, setSelectedPaymentMode] = useState<string | null>(null);
     const [loadingBillers, setLoadingBillers] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);
+    const [pageInput, setPageInput] = useState("1");
     const [meta, setMeta] = useState<BillerMeta | null>(null);
     const [loadingEnquiry, setLoadingEnquiry] = useState(false);
     const [alert, setAlert] = useState<{ type: "info" | "error" | "success"; message: string } | null>(null);
@@ -234,7 +280,7 @@ export default function PayPremiumPage() {
         (async () => {
             try {
                 setLoadingBillers(true);
-                const { records, meta } = await fetchBillers(pageNumber, 9);
+                const { records, meta } = await fetchBillers(pageNumber, 30, selectedState);
                 if (!abort) {
                     setBillers(records);
                     setMeta(meta);
@@ -248,6 +294,17 @@ export default function PayPremiumPage() {
         return () => {
             abort = true;
         };
+    }, [pageNumber, selectedState]);
+
+    // Reset page number when state changes
+    useEffect(() => {
+        setPageNumber(1);
+        setPageInput("1");
+    }, [selectedState]);
+
+    // Sync pageInput with pageNumber when pageNumber changes externally
+    useEffect(() => {
+        setPageInput(String(pageNumber));
     }, [pageNumber]);
 
     const filteredBillers = useMemo(() => {
@@ -351,7 +408,27 @@ export default function PayPremiumPage() {
             {currentStep === 1 && (
                 <div className="bg-white/90 rounded-xl shadow-md p-8 border border-lightBg">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Your Institution</h2>
+
+                    {/* State Selector */}
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-semibold mb-2">Select State/UT</label>
+                        <select
+                            value={selectedState}
+                            onChange={(e) => setSelectedState(e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/70 shadow-sm bg-white"
+                        >
+                            <option value="">All States</option>
+                            {INDIAN_STATES.map((state) => (
+                                <option key={state} value={state}>
+                                    {state}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Search Box */}
                     <div className="mb-6">
+                        <label className="block text-gray-700 font-semibold mb-2">Search Institution</label>
                         <div className="relative">
                             <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search for your school/college..." className="w-full px-4 py-3 pl-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/70 shadow-sm" />
                         </div>
@@ -386,26 +463,61 @@ export default function PayPremiumPage() {
                                     </button>
                                 ))}
                             </div>
-                            <div className="mt-6 flex items-center justify-between">
+                            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <span className="text-sm text-gray-600">
                                     {meta ? `Showing ${meta.recordFrom}-${meta.recordTo} of ${meta.totalRecords}` : ""}
                                 </span>
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap items-center gap-2">
                                     <button
                                         type="button"
                                         onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
                                         disabled={!meta || pageNumber <= 1}
-                                        className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 disabled:opacity-50 hover:bg-gray-50"
+                                        className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition"
                                     >
+                                        <i className="fas fa-chevron-left mr-1"></i>
                                         Previous
                                     </button>
+
+                                    {/* Page Jump Input */}
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-gray-600">Page</span>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max={meta?.totalPages || 1}
+                                            value={pageInput}
+                                            onChange={(e) => setPageInput(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    const value = parseInt(pageInput);
+                                                    if (!isNaN(value) && value >= 1 && value <= (meta?.totalPages || 1)) {
+                                                        setPageNumber(value);
+                                                    } else {
+                                                        setPageInput(String(pageNumber));
+                                                    }
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                const value = parseInt(pageInput);
+                                                if (!isNaN(value) && value >= 1 && value <= (meta?.totalPages || 1)) {
+                                                    setPageNumber(value);
+                                                } else {
+                                                    setPageInput(String(pageNumber));
+                                                }
+                                            }}
+                                            className="w-16 px-2 py-2 border border-gray-300 rounded-md text-sm text-center focus:outline-none focus:ring-2 focus:ring-accent/70"
+                                        />
+                                        <span className="text-sm text-gray-600">of {meta?.totalPages || 1}</span>
+                                    </div>
+
                                     <button
                                         type="button"
                                         onClick={() => setPageNumber((p) => (!meta ? p + 1 : Math.min(meta.totalPages, p + 1)))}
                                         disabled={!meta || pageNumber >= (meta?.totalPages || 1)}
-                                        className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 disabled:opacity-50 hover:bg-gray-50"
+                                        className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition"
                                     >
                                         Next
+                                        <i className="fas fa-chevron-right ml-1"></i>
                                     </button>
                                 </div>
                             </div>
