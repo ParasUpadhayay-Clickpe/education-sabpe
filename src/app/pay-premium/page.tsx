@@ -82,6 +82,12 @@ function isErrPayload(data: any): boolean {
     if (!data) return false;
     const statuscode = data?.statuscode || data?.error?.statuscode;
     const status = data?.status || data?.error?.status;
+
+    // Don't treat "No bill data available" as an error - it's a valid response
+    if (status && /no bill data available|no bill available/i.test(String(status))) {
+        return false;
+    }
+
     return (statuscode && String(statuscode).toUpperCase() === "ERR") || (!!status && /invalid|error|failed/i.test(String(status)));
 }
 
@@ -348,9 +354,16 @@ export default function PayPremiumPage() {
 
         setCurrentStep(3);
         setLoadingEnquiry(true);
+        setAlert(null);
         try {
             const resp = await preEnquiryApi(selectedBiller.billerId, formData);
             setEnquiryData(resp);
+
+            // Check for "No bill data available" status
+            if (resp.status && /no bill data available|no bill available/i.test(resp.status)) {
+                // Don't set as error, let the UI show the "no bill" message
+                setAlert({ type: "info", message: "No pending bill found for the provided details" });
+            }
         } catch (e: any) {
             setAlert({ type: "error", message: e?.message || "Failed to fetch premium details" });
             setCurrentStep(2);
@@ -585,6 +598,30 @@ export default function PayPremiumPage() {
                         <div className="flex flex-col justify-center items-center py-12">
                             <div className="spinner mb-4 border-4 border-gray-200 border-t-accent rounded-full w-10 h-10 animate-spin" />
                             <p className="text-gray-600">Fetching your premium details...</p>
+                        </div>
+                    ) : enquiryData && enquiryData.status && /no bill data available|no bill available/i.test(enquiryData.status) ? (
+                        <div className="text-center py-12">
+                            <div className="bg-yellow-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i className="fas fa-info-circle text-4xl text-yellow-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">No Bill Available</h3>
+                            <p className="text-gray-600 mb-2">No pending bill found for the provided details.</p>
+                            <p className="text-gray-500 text-sm mb-8">Please verify the information you entered or contact the institution.</p>
+
+                            {/* Show entered details */}
+                            <div className="bg-lightBg rounded-lg p-6 max-w-md mx-auto text-left border border-gray-200">
+                                <h4 className="font-semibold mb-3 text-gray-900">Entered Details:</h4>
+                                <div className="space-y-2 text-sm">
+                                    {billerDetails?.inputParameters.map((param) => (
+                                        formData[param.paramName] && (
+                                            <div key={param.paramName} className="flex justify-between">
+                                                <span className="text-gray-600">{param.name}:</span>
+                                                <span className="font-medium">{formData[param.paramName]}</span>
+                                            </div>
+                                        )
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     ) : enquiryData ? (
                         <div>
